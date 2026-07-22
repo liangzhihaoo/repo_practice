@@ -1,12 +1,7 @@
 import { useState } from 'react'
 import './App.css'
 import TodoList from './TodoList'
-
-export type Todo = {
-  id: number;
-  title: string;
-  completed: boolean;
-}
+import type { Todo } from './types/todo'
 
 function App() {
   const [todos, setTodos] = useState<Todo[]>([
