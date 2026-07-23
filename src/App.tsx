@@ -15,7 +15,7 @@ function App() {
       { id: 3, title: 'dajiahao', completed: false },
     ]
   })
-  
+
   useEffect(() => {
     localStorage.setItem('todos', JSON.stringify(todos));
   }, [todos])
@@ -40,15 +40,17 @@ function App() {
   function updateTodo(id: number, text: string) {
     setTodos(prev => prev.map(todo => {
       if (todo.id === id) {
-        return {...todo, title: text};
+        return { ...todo, title: text };
       }
       return todo;
     }));
   }
 
+  const sortedTodos = [...todos].sort((a, b) => Number(a.completed) - Number(b.completed));
+
   return (
     <>
-      <TodoList todos={todos} toggleTodo={toggleTodo} addTodo={addTodo} deleteTodo={deleteTodo} updateTodo={updateTodo} />
+      <TodoList todos={sortedTodos} toggleTodo={toggleTodo} addTodo={addTodo} deleteTodo={deleteTodo} updateTodo={updateTodo} />
     </>
   )
 }
