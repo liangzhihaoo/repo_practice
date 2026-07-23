@@ -34,13 +34,21 @@ function App() {
   }
 
   function deleteTodo(id: number) {
-    const newTodos = todos.filter(todo => todo.id !== id);
-    setTodos(newTodos)
+    setTodos(prev => prev.filter(todo => todo.id !== id));
+  }
+
+  function updateTodo(id: number, text: string) {
+    setTodos(prev => prev.map(todo => {
+      if (todo.id === id) {
+        return {...todo, title: text};
+      }
+      return todo;
+    }));
   }
 
   return (
     <>
-      <TodoList todos={todos} toggleTodo={toggleTodo} addTodo={addTodo} deleteTodo={deleteTodo} />
+      <TodoList todos={todos} toggleTodo={toggleTodo} addTodo={addTodo} deleteTodo={deleteTodo} updateTodo={updateTodo} />
     </>
   )
 }

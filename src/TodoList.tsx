@@ -9,9 +9,10 @@ type TodoListProps = {
     toggleTodo: (id: number) => void;
     addTodo: (title: string) => void;
     deleteTodo: (id: number) => void;
+    updateTodo: (id: number, text: string) => void;
 }
 
-function TodoList({ todos, toggleTodo, addTodo, deleteTodo }: TodoListProps) {
+function TodoList({ todos, toggleTodo, addTodo, deleteTodo, updateTodo }: TodoListProps) {
 
     return (
         <div className="page-todo-list">
@@ -19,7 +20,7 @@ function TodoList({ todos, toggleTodo, addTodo, deleteTodo }: TodoListProps) {
             <TodoInput addTodo={addTodo} />
             <div className="todo-list">
                 {todos.map((todo) => (
-                    <TodoItem key={todo.id} todo={todo} toggleTodo={toggleTodo} deleteTodo={deleteTodo} />
+                    <TodoItem key={todo.id} todo={todo} toggleTodo={toggleTodo} deleteTodo={deleteTodo} updateTodo={updateTodo} />
                 ))}
             </div>
         </div>

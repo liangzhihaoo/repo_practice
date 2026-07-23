@@ -21,6 +21,16 @@
     .todo {
         width: 100%;
         margin-bottom: 10px;
+        vertical-align: baseline;
+        .todo-checkbox {
+            margin-right: 8px;
+        }
+        .todo-title {
+            margin-right: 8px;
+        }
+        .todo-btn {
+            margin-right: 8px;
+        }
     }
 }
 
