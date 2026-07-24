@@ -1,4 +1,7 @@
 import { useState } from "react";
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import './styles/TodoList.css'
 
 type TodoInputProps = {
     addTodo: (input: string) => void;
@@ -19,8 +22,8 @@ function TodoInput({ addTodo }: TodoInputProps) {
 
     return (
         <div className="add-todo">
-            <input type="text" value={todoInput} onChange={handleInputChange} />
-            <button onClick={handleAddTodo}>Add</button>
+            <Input type="text" placeholder="Add a new todo..." value={todoInput} onChange={handleInputChange} />
+            <Button onClick={handleAddTodo}>Add</Button>
         </div>
     );
 }

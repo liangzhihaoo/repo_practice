@@ -1,8 +1,11 @@
 import type { Todo } from './types/todo'
-import { MdDelete } from "react-icons/md";
-import { FaEdit } from "react-icons/fa";
+import { SquarePen, Trash2 } from 'lucide-react';
+import { Checkbox } from "@/components/ui/checkbox"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 import './styles/TodoList.css'
 import { useEffect, useRef, useState } from 'react';
+import { cn } from "./lib/utils"
 
 type TodoItemProps = {
     todo: Todo;
@@ -40,26 +43,34 @@ function TodoItem({ todo, toggleTodo, deleteTodo, updateTodo }: TodoItemProps) {
 
     const displayTodo =
         <>
-            <input className='todo-checkbox' type="checkbox" name={todo.title} checked={todo.completed} onChange={() => toggleTodo(todo.id)} />
-            <span className={'todo-title' + (todo.completed ? ' completed' : '')}>{todo.title}</span>
-            <button className='todo-btn' aria-label='Edit todo' onClick={() => handleEditTodo()}>
-                <FaEdit />
-            </button>
-            <button className='todo-btn' aria-label="Delete todo" onClick={() => deleteTodo(todo.id)}>
-                <MdDelete />
-            </button>
+            <div className="left">
+                <Checkbox name={todo.title} checked={todo.completed} onCheckedChange={() => toggleTodo(todo.id)} />
+                <span className={cn('todo-title', todo.completed && 'completed')}>{todo.title}</span>
+            </div>
+            <div className="right">
+                <Button size="icon" aria-label="Edit Todo" variant="outline" onClick={() => handleEditTodo()}>
+                    <SquarePen />
+                </Button>
+                <Button size="icon" aria-label="Delete Todo" variant="outline" onClick={() => deleteTodo(todo.id)}>
+                    <Trash2 />
+                </Button>
+            </div>
         </>
 
     const editingTodo =
         <>
-            <input className='todo-checkbox' type="checkbox" name={todo.title} checked={todo.completed} disabled />
-            <input className='todo-title todo-title-editing' ref={inputRef} type='text' value={editingText} onChange={(e) => setEditingText(e.target.value)} />
-            <button className='todo-btn' aria-label='Edit todo' onClick={() => handleSaveEditing()}>
-                Save
-            </button>
-            <button className='todo-btn' aria-label="Delete todo" onClick={() => handleCancelEditing()}>
-                Cancel
-            </button>
+            <div className="left">
+                <Checkbox name={todo.title} checked={todo.completed} disabled />
+                <Input className='todo-title todo-title-input' ref={inputRef} type='text' value={editingText} onChange={(e) => setEditingText(e.target.value)} />
+            </div>
+            <div className="right">
+                <Button variant="outline" onClick={() => handleSaveEditing()}>
+                    Save
+                </Button>
+                <Button variant="outline" onClick={() => handleCancelEditing()}>
+                    Cancel
+                </Button>
+            </div>
         </>
 
     return (

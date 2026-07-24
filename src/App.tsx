@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import './App.css'
+import Header from './Header'
 import TodoList from './TodoList'
 import type { Todo } from './types/todo'
 
@@ -49,9 +50,10 @@ function App() {
   const sortedTodos = [...todos].sort((a, b) => Number(a.completed) - Number(b.completed));
 
   return (
-    <>
+    <div className='app'>
+      <Header />
       <TodoList todos={sortedTodos} toggleTodo={toggleTodo} addTodo={addTodo} deleteTodo={deleteTodo} updateTodo={updateTodo} />
-    </>
+    </div>
   )
 }
 
