@@ -3,6 +3,7 @@ import './App.css'
 import Header from './Header'
 import TodoList from './TodoList'
 import type { Todo } from './types/todo'
+import { ThemeProvider } from "@/components/theme-provider"
 
 function App() {
   const [todos, setTodos] = useState<Todo[]>(() => {
@@ -50,10 +51,12 @@ function App() {
   const sortedTodos = [...todos].sort((a, b) => Number(a.completed) - Number(b.completed));
 
   return (
-    <div className='app'>
-      <Header />
-      <TodoList todos={sortedTodos} toggleTodo={toggleTodo} addTodo={addTodo} deleteTodo={deleteTodo} updateTodo={updateTodo} />
-    </div>
+    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+      <div className='min-h-screen flex flex-col bg-background text-foreground'>
+        <Header />
+        <TodoList todos={sortedTodos} toggleTodo={toggleTodo} addTodo={addTodo} deleteTodo={deleteTodo} updateTodo={updateTodo} />
+      </div>
+    </ThemeProvider>
   )
 }
 

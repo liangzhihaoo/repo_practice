@@ -16,22 +16,22 @@ type TodoListProps = {
 function TodoList({ todos, toggleTodo, addTodo, deleteTodo, updateTodo }: TodoListProps) {
 
     return (
-        <div className="page-todo-list">
-            <h1 className="page-title">Todo List</h1>
-            <h3 className='page-subtitle'>Stay organized and get things done.</h3>
-            <div className="todo-list-card">
+        <div className="flex-1 text-center">
+            <h1 className="mt-5 text-3xl">Todo List</h1>
+            <h3 className='text-muted-foreground'>Stay organized and get things done.</h3>
+            <div className="mx-auto mt-5 w-130 max-w-[90vw] rounded-lg border bg-card p-2.5 shadow-lg">
                 <TodoInput addTodo={addTodo} />
                 {
                     todos.length
-                        ? <div className="todo-list">
+                        ? <div className="min-w-50 max-w-125 mx-auto">
                             {todos.map((todo) => (
                                 <TodoItem key={todo.id} todo={todo} toggleTodo={toggleTodo} deleteTodo={deleteTodo} updateTodo={updateTodo} />
                             ))}
                         </div>
-                        : <div className='todo-list empty'>
-                            <div className="empty-icon"><ClipboardCheck color='#94a3b8' /></div>
-                            <span className='title'>No todos yet</span>
-                            <span>Add your first todo above to get started</span>
+                        : <div className='min-w-50 max-w-125 mx-auto'>
+                            <div className="mx-auto flex w-12.5 h-12.5 items-center justify-center rounded-full bg-muted"><ClipboardCheck /></div>
+                            <span className='font-semibold block'>No todos yet</span>
+                            <span className='text-muted-foreground text-sm'>Add your first todo above to get started</span>
                         </div>
                 }
 

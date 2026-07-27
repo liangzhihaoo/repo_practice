@@ -32,7 +32,7 @@ function TodoItem({ todo, toggleTodo, deleteTodo, updateTodo }: TodoItemProps) {
 
     function handleSaveEditing() {
         if (!editingText.trim()) return;
-        updateTodo(todo.id, editingText);
+        updateTodo(todo.id, editingText.trim());
         setEditing(false);
     }
 
@@ -41,17 +41,29 @@ function TodoItem({ todo, toggleTodo, deleteTodo, updateTodo }: TodoItemProps) {
         setEditingText(todo.title);
     }
 
+    function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+        if (e.code === 'Enter') {
+            handleSaveEditing();
+        } else if (e.code === 'Escape') {
+            handleCancelEditing();
+        }
+    }
+
+    function handleDoubleClickTodoTitle(e: React.MouseEvent<HTMLSpanElement, MouseEvent>) {
+        handleEditTodo();
+    }
+
     const displayTodo =
         <>
-            <div className="left">
+            <div className="flex flex-1 items-center">
                 <Checkbox name={todo.title} checked={todo.completed} onCheckedChange={() => toggleTodo(todo.id)} />
-                <span className={cn('todo-title', todo.completed && 'completed')}>{todo.title}</span>
+                <span className={cn('ml-2', todo.completed && 'text-muted-foreground line-through')} onDoubleClick={handleDoubleClickTodoTitle}>{todo.title}</span>
             </div>
-            <div className="right">
+            <div className="ml-4">
                 <Button size="icon" aria-label="Edit Todo" variant="outline" onClick={() => handleEditTodo()}>
                     <SquarePen />
                 </Button>
-                <Button size="icon" aria-label="Delete Todo" variant="outline" onClick={() => deleteTodo(todo.id)}>
+                <Button className="ml-1.5" size="icon" aria-label="Delete Todo" variant="outline" onClick={() => deleteTodo(todo.id)}>
                     <Trash2 />
                 </Button>
             </div>
@@ -59,22 +71,22 @@ function TodoItem({ todo, toggleTodo, deleteTodo, updateTodo }: TodoItemProps) {
 
     const editingTodo =
         <>
-            <div className="left">
+            <div className="flex flex-1 items-center">
                 <Checkbox name={todo.title} checked={todo.completed} disabled />
-                <Input className='todo-title todo-title-input' ref={inputRef} type='text' value={editingText} onChange={(e) => setEditingText(e.target.value)} />
+                <Input className='ml-2' ref={inputRef} type='text' value={editingText} onChange={(e) => setEditingText(e.target.value)} onKeyDown={handleKeyDown} />
             </div>
-            <div className="right">
+            <div className="ml-4">
                 <Button variant="outline" onClick={() => handleSaveEditing()}>
                     Save
                 </Button>
-                <Button variant="outline" onClick={() => handleCancelEditing()}>
+                <Button className="ml-1.5" variant="outline" onClick={() => handleCancelEditing()}>
                     Cancel
                 </Button>
             </div>
         </>
 
     return (
-        <div className="todo">
+        <div className="w-full mb-2.5 flex justify-between p-1.5 border rounded-md transition-all duration-150 hover:bg-muted">
             {
                 editing ? editingTodo : displayTodo
             }

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import './styles/TodoList.css'
@@ -16,14 +16,23 @@ function TodoInput({ addTodo }: TodoInputProps) {
 
     function handleAddTodo() {
         if (!todoInput.trim()) return;
-        addTodo(todoInput);
+        addTodo(todoInput.trim());
         setTodoInput('');
     }
 
+    const createInputRef = useRef<HTMLInputElement>(null);
+
+    function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+        if (e.code === 'Enter') {
+            handleAddTodo();
+            createInputRef.current?.select();
+        }
+    }
+
     return (
-        <div className="add-todo">
-            <Input type="text" placeholder="Add a new todo..." value={todoInput} onChange={handleInputChange} />
-            <Button onClick={handleAddTodo}>Add</Button>
+        <div className="w-full mb-5 flex">
+            <Input type="text" placeholder="Add a new todo..." ref={createInputRef} value={todoInput} onChange={handleInputChange} onKeyDown={handleKeyDown} />
+            <Button className="ml-2.5" onClick={handleAddTodo}>Add</Button>
         </div>
     );
 }
