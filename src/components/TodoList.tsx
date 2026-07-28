@@ -1,4 +1,4 @@
-import type { Todo } from './types/todo'
+import type { Todo } from '../types/todo'
 import TodoItem from "./TodoItem";
 import TodoInput from "./TodoInput"
 import { ClipboardCheck } from 'lucide-react';

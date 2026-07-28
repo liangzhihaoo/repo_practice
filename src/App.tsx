@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import Header from './Header'
-import TodoList from './TodoList'
+import Header from './components/Header'
+import TodoList from './components/TodoList'
 import type { Todo } from './types/todo'
 import { ThemeProvider } from "@/components/theme-provider"
 

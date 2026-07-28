@@ -1,10 +1,10 @@
-import type { Todo } from './types/todo'
+import type { Todo } from '../types/todo'
 import { SquarePen, Trash2 } from 'lucide-react';
 import { Checkbox } from "@/components/ui/checkbox"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { useEffect, useRef, useState } from 'react';
-import { cn } from "./lib/utils"
+import { cn } from "../lib/utils"
 
 type TodoItemProps = {
     todo: Todo;
