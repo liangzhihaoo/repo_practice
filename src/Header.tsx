@@ -1,5 +1,4 @@
 import { ClipboardCheck, Sun, Moon } from "lucide-react";
-import './styles/Header.css'
 import { useTheme } from "./components/theme-provider";
 import { Button } from "./components/ui/button";
 

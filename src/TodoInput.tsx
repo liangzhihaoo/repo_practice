@@ -1,7 +1,6 @@
 import { useRef, useState } from "react";
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import './styles/TodoList.css'
 
 type TodoInputProps = {
     addTodo: (input: string) => void;

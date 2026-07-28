@@ -3,8 +3,6 @@ import TodoItem from "./TodoItem";
 import TodoInput from "./TodoInput"
 import { ClipboardCheck } from 'lucide-react';
 
-import './styles/TodoList.css'
-
 type TodoListProps = {
     todos: Todo[];
     toggleTodo: (id: number) => void;
