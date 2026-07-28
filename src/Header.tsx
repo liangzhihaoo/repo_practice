@@ -1,6 +1,7 @@
 import { ClipboardCheck, Sun, Moon } from "lucide-react";
 import './styles/Header.css'
 import { useTheme } from "./components/theme-provider";
+import { Button } from "./components/ui/button";
 
 function Header() {
     const { theme, setTheme } = useTheme();
@@ -11,8 +12,11 @@ function Header() {
                 <ClipboardCheck /><span className="mx-2">Todo List</span>
             </div>
             <div className="my-1 mx-2.5">
-                { theme === 'dark' && <Moon onClick={() => setTheme('light')} />}
-                { theme === 'light' && <Sun onClick={() => setTheme('dark')} />}
+                <Button variant="ghost" size="icon" onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} >
+                    {
+                        theme === 'dark' ? <Moon /> : <Sun />
+                    }
+                </Button>
             </div>
         </div>
      );
