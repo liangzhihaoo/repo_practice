@@ -29,9 +29,9 @@ function TodoInput({ addTodo }: TodoInputProps) {
     }
 
     return (
-        <div className="w-full mb-5 flex">
+        <div className="w-full mb-0 sm:mb-2 flex flex-col sm:flex-row">
             <Input type="text" placeholder="Add a new todo..." ref={createInputRef} value={todoInput} onChange={handleInputChange} onKeyDown={handleKeyDown} />
-            <Button className="ml-2.5" onClick={handleAddTodo}>Add</Button>
+            <Button className="my-2 sm:my-0 sm:ml-2.5" onClick={handleAddTodo}>Add</Button>
         </div>
     );
 }

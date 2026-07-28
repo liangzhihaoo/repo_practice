@@ -48,17 +48,17 @@ function TodoItem({ todo, toggleTodo, deleteTodo, updateTodo }: TodoItemProps) {
         }
     }
 
-    function handleDoubleClickTodoTitle(e: React.MouseEvent<HTMLSpanElement, MouseEvent>) {
+    function handleDoubleClickTodoTitle() {
         handleEditTodo();
     }
 
     const displayTodo =
         <>
-            <div className="flex flex-1 items-center">
+            <div className="flex flex-1 min-w-0 items-center pr-2">
                 <Checkbox name={todo.title} checked={todo.completed} onCheckedChange={() => toggleTodo(todo.id)} />
-                <span className={cn('ml-2', todo.completed && 'text-muted-foreground line-through')} onDoubleClick={handleDoubleClickTodoTitle}>{todo.title}</span>
+                <span className={cn('ml-2 break-words text-start line-clamp-2 sm:line-clamp-1', todo.completed && 'text-muted-foreground line-through')} onDoubleClick={handleDoubleClickTodoTitle}>{todo.title}</span>
             </div>
-            <div className="ml-4">
+            <div className="ml-4 sm:ml-0 self-end sm:self-auto mt-2 sm:mt-0">
                 <Button size="icon" aria-label="Edit Todo" variant="outline" onClick={() => handleEditTodo()}>
                     <SquarePen />
                 </Button>
@@ -70,11 +70,11 @@ function TodoItem({ todo, toggleTodo, deleteTodo, updateTodo }: TodoItemProps) {
 
     const editingTodo =
         <>
-            <div className="flex flex-1 items-center">
+            <div className="flex flex-1 items-center pr-2">
                 <Checkbox name={todo.title} checked={todo.completed} disabled />
                 <Input className='ml-2' ref={inputRef} type='text' value={editingText} onChange={(e) => setEditingText(e.target.value)} onKeyDown={handleKeyDown} />
             </div>
-            <div className="ml-4">
+            <div className="ml-4 sm:ml-0 self-end sm:self-auto mt-2 sm:mt-0">
                 <Button variant="outline" onClick={() => handleSaveEditing()}>
                     Save
                 </Button>
@@ -85,7 +85,7 @@ function TodoItem({ todo, toggleTodo, deleteTodo, updateTodo }: TodoItemProps) {
         </>
 
     return (
-        <div className="w-full mb-2.5 flex justify-between p-1.5 border rounded-md transition-all duration-150 hover:bg-muted">
+        <div className="w-full mb-2.5 flex flex-col sm:flex-row justify-between p-1.5 border rounded-md transition-all duration-150 hover:bg-muted">
             {
                 editing ? editingTodo : displayTodo
             }
