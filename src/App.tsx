@@ -3,45 +3,83 @@ import Header from './components/Header'
 import TodoList from './components/TodoList'
 import type { Todo } from './types/todo'
 import { ThemeProvider } from "@/components/theme-provider"
+import { supabase } from './lib/supabase'
 
 function App() {
-  const [todos, setTodos] = useState<Todo[]>(() => {
-    const str = localStorage.getItem('todos');
-    if (str) {
-      return JSON.parse(str)
-    }
-    return [
-      { id: 1, title: 'nihao', completed: false },
-      { id: 2, title: 'wohao', completed: true },
-      { id: 3, title: 'dajiahao', completed: false },
-    ]
-  })
+  const [todos, setTodos] = useState<Todo[]>([]);
 
   useEffect(() => {
-    localStorage.setItem('todos', JSON.stringify(todos));
-  }, [todos])
+    async function getTodos() {
+      const { data, error } = await supabase
+        .from('todos')
+        .select()
+        .order('created_at', { ascending: true });
 
-  function toggleTodo(id: number) {
-    setTodos(prev => prev.map(todo => todo.id === id ? { ...todo, completed: !todo.completed } : todo))
-  }
+      if (error) {
+        console.error('Failed to fetch todos: ', error);
+        return;
+      }
 
-  function addTodo(title: string) {
-    const newTodo: Todo = {
-      id: Date.now(),
-      title,
-      completed: false
+      if (data) {
+        setTodos(data);
+      }
     }
-    setTodos(prev => [...prev, newTodo]);
+
+    getTodos();
+  }, [])
+
+  async function addTodo(title: string) {
+    const { data, error } = await supabase
+      .from('todos')
+      .insert({
+        title,
+        completed: false
+      })
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Failed to add todo: ', error);
+      return;
+    }
+
+    setTodos(prev => [...prev, data]);
   }
 
-  function deleteTodo(id: number) {
-    setTodos(prev => prev.filter(todo => todo.id !== id));
+  async function deleteTodo(id: number) {
+    const { data, error } = await supabase
+      .from('todos')
+      .delete()
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Failed to delete todo: ', error);
+      return;
+    }
+
+    setTodos(prev => prev.filter(todo => todo.id !== data.id));
   }
 
-  function updateTodo(id: number, text: string) {
+  async function updateTodo(newTodo: Todo) {
+    const { data, error } = await supabase
+      .from('todos')
+      .update({
+        title: newTodo.title,
+        completed: newTodo.completed,
+      })
+      .eq('id', newTodo.id)
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Failed to update todo: ', error);
+      return;
+    }
     setTodos(prev => prev.map(todo => {
-      if (todo.id === id) {
-        return { ...todo, title: text };
+      if (todo.id === newTodo.id) {
+        return data;
       }
       return todo;
     }));
@@ -53,7 +91,7 @@ function App() {
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <div className='min-h-screen flex flex-col bg-background text-foreground'>
         <Header />
-        <TodoList todos={sortedTodos} toggleTodo={toggleTodo} addTodo={addTodo} deleteTodo={deleteTodo} updateTodo={updateTodo} />
+        <TodoList todos={sortedTodos} addTodo={addTodo} deleteTodo={deleteTodo} updateTodo={updateTodo} />
       </div>
     </ThemeProvider>
   )

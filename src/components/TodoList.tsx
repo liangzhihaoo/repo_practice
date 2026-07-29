@@ -5,13 +5,12 @@ import { ClipboardCheck } from 'lucide-react';
 
 type TodoListProps = {
     todos: Todo[];
-    toggleTodo: (id: number) => void;
     addTodo: (title: string) => void;
     deleteTodo: (id: number) => void;
-    updateTodo: (id: number, text: string) => void;
+    updateTodo: (todo: Todo) => void;
 }
 
-function TodoList({ todos, toggleTodo, addTodo, deleteTodo, updateTodo }: TodoListProps) {
+function TodoList({ todos, addTodo, deleteTodo, updateTodo }: TodoListProps) {
 
     return (
         <div className="flex-1 text-center px-4 sm:p-6 md:p-8">
@@ -23,7 +22,7 @@ function TodoList({ todos, toggleTodo, addTodo, deleteTodo, updateTodo }: TodoLi
                     todos.length
                         ? <div className="w-full max-w-xl mx-auto">
                             {todos.map((todo) => (
-                                <TodoItem key={todo.id} todo={todo} toggleTodo={toggleTodo} deleteTodo={deleteTodo} updateTodo={updateTodo} />
+                                <TodoItem key={todo.id} todo={todo} deleteTodo={deleteTodo} updateTodo={updateTodo} />
                             ))}
                         </div>
                         : <div className='w-full max-w-xl mx-auto'>

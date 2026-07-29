@@ -8,11 +8,10 @@ import { cn } from "../lib/utils"
 
 type TodoItemProps = {
     todo: Todo;
-    toggleTodo: (id: number) => void;
     deleteTodo: (id: number) => void;
-    updateTodo: (id: number, text: string) => void;
+    updateTodo: (todo: Todo) => void;
 }
-function TodoItem({ todo, toggleTodo, deleteTodo, updateTodo }: TodoItemProps) {
+function TodoItem({ todo, deleteTodo, updateTodo }: TodoItemProps) {
     const [editingText, setEditingText] = useState(todo.title);
     const [editing, setEditing] = useState(false);
 
@@ -24,14 +23,26 @@ function TodoItem({ todo, toggleTodo, deleteTodo, updateTodo }: TodoItemProps) {
         }
     }, [editing]);
 
+    function handleToggleComplete() {
+        updateTodo({...todo, completed: !todo.completed})
+    }
+
     function handleEditTodo() {
         setEditingText(todo.title);
         setEditing(true);
     }
 
     function handleSaveEditing() {
-        if (!editingText.trim()) return;
-        updateTodo(todo.id, editingText.trim());
+        const trimmedTitle = editingText.trim();
+
+        if (!trimmedTitle) return;
+
+        if (trimmedTitle === todo.title) {
+            setEditing(false);
+            return;
+        }
+
+        updateTodo({...todo, title: trimmedTitle});
         setEditing(false);
     }
 
@@ -55,11 +66,11 @@ function TodoItem({ todo, toggleTodo, deleteTodo, updateTodo }: TodoItemProps) {
     const displayTodo =
         <>
             <div className="flex flex-1 min-w-0 items-center pr-2">
-                <Checkbox name={todo.title} checked={todo.completed} onCheckedChange={() => toggleTodo(todo.id)} />
+                <Checkbox name={todo.title} checked={todo.completed} onCheckedChange={handleToggleComplete} />
                 <span className={cn('ml-2 break-words text-start line-clamp-2 sm:line-clamp-1', todo.completed && 'text-muted-foreground line-through')} onDoubleClick={handleDoubleClickTodoTitle}>{todo.title}</span>
             </div>
             <div className="ml-4 sm:ml-0 self-end sm:self-auto mt-2 sm:mt-0">
-                <Button size="icon" aria-label="Edit Todo" variant="outline" onClick={() => handleEditTodo()}>
+                <Button size="icon" aria-label="Edit Todo" variant="outline" onClick={handleEditTodo}>
                     <SquarePen />
                 </Button>
                 <Button className="ml-1.5" size="icon" aria-label="Delete Todo" variant="outline" onClick={() => deleteTodo(todo.id)}>
@@ -75,10 +86,10 @@ function TodoItem({ todo, toggleTodo, deleteTodo, updateTodo }: TodoItemProps) {
                 <Input className='ml-2' ref={inputRef} type='text' value={editingText} onChange={(e) => setEditingText(e.target.value)} onKeyDown={handleKeyDown} />
             </div>
             <div className="ml-4 sm:ml-0 self-end sm:self-auto mt-2 sm:mt-0">
-                <Button variant="outline" onClick={() => handleSaveEditing()}>
+                <Button variant="outline" onClick={handleSaveEditing}>
                     Save
                 </Button>
-                <Button className="ml-1.5" variant="outline" onClick={() => handleCancelEditing()}>
+                <Button className="ml-1.5" variant="outline" onClick={handleCancelEditing}>
                     Cancel
                 </Button>
             </div>
