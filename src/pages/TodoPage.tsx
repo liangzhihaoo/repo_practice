@@ -4,9 +4,11 @@ import TodoList from '../components/TodoList'
 import type { Todo } from '../types/todo'
 import { ThemeProvider } from "@/components/theme-provider"
 import { supabase } from '../lib/supabase'
+import { useAuth } from '@/contexts/AuthContext'
 
 function TodoPage() {
     const [todos, setTodos] = useState<Todo[]>([]);
+    const { session } = useAuth();
 
   useEffect(() => {
     async function getTodos() {
@@ -33,7 +35,8 @@ function TodoPage() {
       .from('todos')
       .insert({
         title,
-        completed: false
+        completed: false,
+        user_id: session?.user.id,
       })
       .select()
       .single();
