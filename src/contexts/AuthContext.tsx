@@ -18,11 +18,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const [isAuthLoading, setIsAuthLoading] = useState(true);
 
     useEffect(() => {
-        const sleep = (ms: number) => new Promise(res => setTimeout(res, ms));
         const getInitialSession = async () => {
             const { data: { session } } = await supabase.auth.getSession();
             setSession(session);
-            await sleep(1300);
             setIsAuthLoading(false);
         };
         getInitialSession();
@@ -33,7 +31,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
         return () => subscription.unsubscribe();
     }, []);
-    
+
     return (
         <AuthContext.Provider value={{ session, isAuthLoading }} >
             {children}
