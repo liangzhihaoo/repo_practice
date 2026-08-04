@@ -40,7 +40,7 @@ function TodoPage() {
     getTodos();
   }, [])
 
-  async function addTodo(title: string) {
+  async function addTodo(title: string): Promise<boolean> {
     const { data, error } = await supabase
       .from('todos')
       .insert({
@@ -54,13 +54,14 @@ function TodoPage() {
     if (error) {
       toast.add({
         type: "error",
-        description: 'Failed to add todo: ' + error,
+        description: 'Failed to add todo: ' + (error?.message || error),
       })
       console.error('Failed to add todo: ', error);
-      return;
+      return false;
     }
 
     setTodos(prev => [...prev, data]);
+    return true;
   }
 
   async function deleteTodo(id: number) {
@@ -74,7 +75,7 @@ function TodoPage() {
     if (error) {
       toast.add({
         type: "error",
-        description: 'Failed to delete todo: ' + error,
+        description: 'Failed to delete todo: ' + (error?.message || error),
       })
       console.error('Failed to delete todo: ', error);
       return;
@@ -97,7 +98,7 @@ function TodoPage() {
     if (error) {
       toast.add({
         type: "error",
-        description: 'Failed to update todo: ' + error,
+        description: 'Failed to update todo: ' + (error?.message || error),
       })
       console.error('Failed to update todo: ', error);
       return;
