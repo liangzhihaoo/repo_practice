@@ -38,7 +38,7 @@ function TodoInput({ addTodo }: TodoInputProps) {
     const createInputRef = useRef<HTMLInputElement>(null);
 
     return (
-        <form onSubmit={handleSubmit} className="mb-2 flex gap-2">
+        <form onSubmit={handleSubmit} className="mb-2 flex flex-col sm:flex-row gap-2">
             <Input type="text" placeholder="Add a new todo..." ref={createInputRef} value={todoInput} onChange={handleInputChange} />
             <Button type="submit" disabled={isAddingTodo}>Add</Button>
         </form>
