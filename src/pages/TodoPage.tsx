@@ -26,7 +26,7 @@ function TodoPage() {
         .order('created_at', { ascending: true });
 
       if (error) {
-        setTodosError('Failed to fetch todos: ' + error);
+        setTodosError('Failed to fetch todos: ' + (error?.message || error));
         setTodosLoading(false);
         return;
       }
@@ -64,7 +64,7 @@ function TodoPage() {
     return true;
   }
 
-  async function deleteTodo(id: number) {
+  async function deleteTodo(id: number): Promise<void> {
     const { data, error } = await supabase
       .from('todos')
       .delete()
@@ -84,7 +84,7 @@ function TodoPage() {
     setTodos(prev => prev.filter(todo => todo.id !== data.id));
   }
 
-  async function updateTodo(newTodo: Todo) {
+  async function updateTodo(newTodo: Todo): Promise<boolean> {
     const { data, error } = await supabase
       .from('todos')
       .update({
@@ -101,7 +101,7 @@ function TodoPage() {
         description: 'Failed to update todo: ' + (error?.message || error),
       })
       console.error('Failed to update todo: ', error);
-      return;
+      return false;
     }
     setTodos(prev => prev.map(todo => {
       if (todo.id === newTodo.id) {
@@ -109,6 +109,7 @@ function TodoPage() {
       }
       return todo;
     }));
+    return true;
   }
 
   const sortedTodos = [...todos].sort((a, b) => Number(a.completed) - Number(b.completed));

@@ -8,12 +8,13 @@ import { cn } from "../lib/utils"
 
 type TodoItemProps = {
     todo: Todo;
-    deleteTodo: (id: number) => void;
-    updateTodo: (todo: Todo) => void;
+    deleteTodo: (id: number) => Promise<void>;
+    updateTodo: (todo: Todo) => Promise<boolean>;
 }
 function TodoItem({ todo, deleteTodo, updateTodo }: TodoItemProps) {
     const [editingText, setEditingText] = useState(todo.title);
     const [editing, setEditing] = useState(false);
+    const [isProcessing, setIsProcessing] = useState(false);
 
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -32,7 +33,9 @@ function TodoItem({ todo, deleteTodo, updateTodo }: TodoItemProps) {
         setEditing(true);
     }
 
-    function handleSaveEditing() {
+    async function handleSaveEditing() {
+        if (isProcessing) return;
+
         const trimmedTitle = editingText.trim();
 
         if (!trimmedTitle) return;
@@ -42,8 +45,16 @@ function TodoItem({ todo, deleteTodo, updateTodo }: TodoItemProps) {
             return;
         }
 
-        updateTodo({...todo, title: trimmedTitle});
-        setEditing(false);
+        setIsProcessing(true);
+
+        try {
+            const success = await updateTodo({...todo, title: trimmedTitle});
+            if (success) {
+                setEditing(false);
+            }
+        } finally {
+            setIsProcessing(false);
+        }
     }
 
     function handleCancelEditing() {
@@ -86,10 +97,10 @@ function TodoItem({ todo, deleteTodo, updateTodo }: TodoItemProps) {
                 <Input className='ml-2' ref={inputRef} type='text' value={editingText} onChange={(e) => setEditingText(e.target.value)} onKeyDown={handleKeyDown} />
             </div>
             <div className="ml-4 sm:ml-0 self-end sm:self-auto mt-2 sm:mt-0">
-                <Button variant="outline" onClick={handleSaveEditing}>
+                <Button variant="outline" onClick={handleSaveEditing} disabled={isProcessing}>
                     Save
                 </Button>
-                <Button className="ml-1.5" variant="outline" onClick={handleCancelEditing}>
+                <Button className="ml-1.5" variant="outline" onClick={handleCancelEditing} disabled={isProcessing}>
                     Cancel
                 </Button>
             </div>

@@ -4,8 +4,8 @@ import { ClipboardCheck } from 'lucide-react';
 
 type TodoListProps = {
     todos: Todo[];
-    deleteTodo: (id: number) => void;
-    updateTodo: (todo: Todo) => void;
+    deleteTodo: (id: number) => Promise<void>;
+    updateTodo: (todo: Todo) => Promise<boolean>;
 }
 
 function TodoList({ todos, deleteTodo, updateTodo }: TodoListProps) {
